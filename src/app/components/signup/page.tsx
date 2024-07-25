@@ -297,8 +297,3 @@ export default function Login() {
         </main>
     );
 }
-
-async function signup(email: string, password: string) {
-    // Implement the signup logic here, possibly using a fetch request
-    // Example: return await fetch('/api/signup', { method: 'POST', body: { email, password } });
-}

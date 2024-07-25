@@ -1,61 +1,42 @@
-import { PLATFORMS } from "../../../lib/platforms"
-import Option from "./Option"
-// import { generatePlatformIcon } from "../../../lib/generatePlatformIcon"
-import Chevron from "../../../assets/Chevron"
-import { useState } from "react"
+import { PLATFORMS } from "../../../lib/platforms";
+import Option from "./Option";
+import Chevron from "../../../assets/Chevron";
+import { useState } from "react";
 
-export default function Select({
-    selectedPlatform,
-    changePlatform
-}: {
-    selectedPlatform: string
-    changePlatform: (newPlatform: string) => void
-}) {
-    const [isVisible, setIsVisible] = useState(false)
+export default function Select({ selectedPlatform, changePlatform }) {
+    const [isOpen, setIsOpen] = useState(false);
 
-    const handleClick = (platform: string) => {
-        changePlatform(platform)
-        setIsVisible(false)
-    }
+    const toggleDropdown = () => {
+        setIsOpen(!isOpen);
+    };
+
+    const handleSelect = (platform) => {
+        changePlatform(platform);
+        setIsOpen(false);
+    };
 
     return (
-        <label
-            // className={styles.label}
-        >
-
-            {/* {generatePlatformIcon(selectedPlatform)} */}
-
-            <span>
-                Platform
-            </span>
-
-            <div
-                // className={styles.input}
-                onClick={() => setIsVisible(!isVisible)}
+        <div className="relative">
+            <div 
+                className={`dropdown-layout dropdown-style ${isOpen ? 'dropdown-styles-active' : ''}`} 
+                onClick={toggleDropdown}
             >
-                {selectedPlatform}
-
-                <Chevron />
-                
+                <span>{selectedPlatform}</span>
+                <Chevron className={`transition-transform ${isOpen ? 'transform rotate-180' : ''}`} />
             </div>
-            
-            <div
-                // className={styles.dropdown}
-                aria-hidden={!isVisible}
-            >
-
-                {Object.values(PLATFORMS).map(platform => (
-
-                    <Option
-                        key={crypto.randomUUID()}
-                        platform={platform}
-                        onClick={() => handleClick(platform)}
-                    />
-
-                ))}
-
-            </div>
-
-        </label>
-    )
+            {isOpen && (
+                <div className="absolute mt-2 w-full dropdown-list-layout dropdown-list-styles shadow-purple-shadow">
+                    {PLATFORMS.map((platform) => (
+                        <div 
+                            key={platform}
+                            className={`dropdown-option p-2 ${selectedPlatform === platform ? 'text-purple' : ''}`}
+                            onClick={() => handleSelect(platform)}
+                        >
+                            <span>{platform}</span>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
 }
